@@ -15,7 +15,7 @@ def GET(url: str):
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-images")
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=options)
 
     try:
         driver.set_page_load_timeout(10)
