@@ -7,15 +7,16 @@ from selenium.webdriver.chrome.service import Service
 
 console = Console()
 
+
 def GET(url: str):
-    manager_driver = Service(executable_path=ChromeDriverManager().install())
+
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')  # Headless modunu etkinleştir
+    options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-images")
-    driver = webdriver.Chrome(service=manager_driver, options=options)
-    
+    driver = webdriver.Chrome()
+
     try:
         driver.set_page_load_timeout(10)
         driver.get(url)

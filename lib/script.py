@@ -21,7 +21,6 @@ class Scraper:
             self.console.print(f"\n[bold green]Connection to [bold blue]{self.url}[/bold blue] established[/bold green]\n")
         else:
             self.console.print(f"\n[red]Connection to {self.url} failed[/red]\n")
-            exit()
 
     def __product_links(self, category_url:str):
         try:
