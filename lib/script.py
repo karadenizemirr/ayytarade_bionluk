@@ -1,10 +1,9 @@
 import requests
-import threading
-import concurrent.futures
-from multiprocessing import Process, Lock
+from multiprocessing import Lock
 from rich.console import Console
 from bs4 import BeautifulSoup
 from lib import custom_request
+from urllib.parse import urlparse
 
 class Scraper:
     def __init__(self,url:str, counter:int) -> None:
@@ -39,6 +38,11 @@ class Scraper:
         try:
             html_res = custom_request.GET(product_link)
 
+            # CategoryName
+            parsed_url = urlparse(self.url)
+            category = parsed_url.path.split('/')[1]
+            
+
             soup = BeautifulSoup(html_res, "html.parser")
             product_name = soup.select('body > div.body > div.container > div.productView-scope > div.productView.productView--full > div.productView-detailsWrapper > div > section:nth-child(1) > div > h1')[0].text
             product_upc = soup.select('body > div.body > div.container > div.productView-scope > div.productView.productView--full > div.productView-detailsWrapper > div > section:nth-child(1) > div > dl > dd.productView-info-value.productView-info-value--upc')[0].text
@@ -46,13 +50,14 @@ class Scraper:
             product_stock = soup.select('body > div.body > div.container > div.productView-scope > div.productView.productView--full > div.productView-detailsWrapper > div > section:nth-child(3) > div.productView-options.productView-options--1col > form.form.form--addToCart > div.form-field.form-field--stock > label > span')[0].text
             product_image = soup.find('li', {'class': 'productView-imageCarousel-main-item'}).find('img')['src']
 
-
             detail = {
                 "product_name": product_name,
+                "product_category": category,
                 "product_upc": product_upc,
                 "product_price": product_price,
                 "product_stock": product_stock,
-                "product_image": product_image
+                "product_image": product_image,
+                "product_link": product_link
             }
             
             self.console.print(f"[bold green]Product [bold blue]{product_name}[/bold blue] scraped[/bold green]\n")
